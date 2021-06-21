@@ -175,7 +175,7 @@ def plot_params(params_filename, filename_prior='priors/abc_prior_config_OnCDCTa
                     plt.plot(durations, true_durs, color='k', label='true')
                 plt.plot(durations, prior_mean_durs, color='red', label='prior')
                 plt.fill_between(durations, prior_lower_durs, prior_upper_durs, color='red', alpha=0.3)
-                plt.plot(durations, mean_durs, color='blue', label='posterior\nacross %d runs' % (num_samples))
+                plt.plot(durations, mean_durs, color='blue', label='posterior') #\nacross %d runs' % (num_samples))
                 plt.fill_between(durations, lower_durs, upper_durs, color='blue', alpha=0.3)        
                 plt.title(param_to_name_dict[param])
                 plt.xticks([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21])
@@ -185,7 +185,7 @@ def plot_params(params_filename, filename_prior='priors/abc_prior_config_OnCDCTa
                 plt.tight_layout()
                 if filename_to_save:
                     plt.savefig(filename_to_save + "_%s.pdf" % (param), bbox_inches='tight', pad_inches=0)
-                # plt.show()
+                plt.show()
             else:
                 if filename_true_params is not None:
                     ax.plot(durations, true_durs, color='k', label='true')
@@ -206,7 +206,7 @@ def plot_params(params_filename, filename_prior='priors/abc_prior_config_OnCDCTa
                 if filename_true_params is not None:
                     plt.axvline(true_params[param], color='k', label='true')
                 plt.hist(prior_samples[param], density=True, stacked=True, alpha=0.3, rwidth=1.0, edgecolor='r',  facecolor='r', label='prior')
-                plt.hist(param_distributions[param], density=True, stacked=True, alpha=0.5, edgecolor='blue', facecolor='blue', label='posterior\nacross %d runs' % (num_samples))
+                plt.hist(param_distributions[param], density=True, stacked=True, alpha=0.5, edgecolor='blue', facecolor='blue', label='posterior') #\nacross %d runs' % (num_samples))
                 plt.title(param_to_name_dict[param])
                 if 'Die' in param:
                     plt.xlim((0, 0.1))
@@ -216,12 +216,12 @@ def plot_params(params_filename, filename_prior='priors/abc_prior_config_OnCDCTa
                 plt.tight_layout()
                 if filename_to_save:
                     plt.savefig(filename_to_save + "_%s.pdf" % (param), bbox_inches='tight', pad_inches=0)
-                # plt.show()
+                plt.show()
             else:
                 if filename_true_params is not None:
                     ax.axvline(true_params[param], color='k', label='true')
                 ax.hist(prior_samples[param], density=True, stacked=True, alpha=0.3, rwidth=1.0, edgecolor='r',  facecolor='r', label='prior')
-                ax.hist(param_distributions[param], density=True, stacked=True, alpha=0.5, edgecolor='blue', facecolor='blue', label='posterior\nacross %d runs' % (num_samples))
+                ax.hist(param_distributions[param], density=True, stacked=True, alpha=0.5, edgecolor='blue', facecolor='blue', label='posterior') #\nacross %d runs' % (num_samples))
                 ax.set_title(param_to_name_dict[param])
                 if 'Die' in param:
                     ax.set_xlim((0, 0.1))
