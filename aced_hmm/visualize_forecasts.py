@@ -308,14 +308,14 @@ def plot_forecasts(forecasts_template_path, config_filepath, true_counts_filepat
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--samples_path', default='results/US/MA-20201111-20210111-20210211/PRETRAINED_posterior_samples.json', type=str)
-    parser.add_argument('--config_path', default='results/US/UT-20201111-20210111-20210211/config_after_abc_no_distance_weights.json', type=str)
-    parser.add_argument('--input_summaries_template_path', default='results/US/UT-20201111-20210111-20210211/summary_after_abc_no_distance_weights', type=str)
-    parser.add_argument('--true_stats', default='datasets/US/UT-20201111-20210111-20210211/daily_counts.csv', type=str)
+    parser.add_argument('--samples_path', default='results/US/MA-20201111-20210111-20210211/posterior_samples.json', type=str)
+    parser.add_argument('--config_path', default='results/US/MA-20201111-20210111-20210211/config_after_abc.json', type=str)
+    parser.add_argument('--input_summaries_template_path', default='results/US/MA-20201111-20210111-20210211/summary_after_abc', type=str)
+    parser.add_argument('--true_stats', default='datasets/US/MA-20201111-20210111-20210211/daily_counts.csv', type=str)
     args = parser.parse_args()
 
     ## Plot learned posterior and prior
-    plot_params(args.samples_path, plot_disjointly=True, filename_to_save='MA_compact_title')
+    plot_params(args.samples_path)
 
     ## Plot forecasts for counts of interest
-    # plot_forecasts(args.input_summaries_template_path, args.config_path, args.true_stats)
+    plot_forecasts(args.input_summaries_template_path, args.config_path, args.true_stats)
