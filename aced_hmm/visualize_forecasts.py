@@ -80,6 +80,23 @@ def plot_params(params_filename, filename_prior='priors/abc_prior_config_OnCDCTa
         param_to_prior_dict['pmf_duration_Recovering_%s' % state] = 'prior_duration_Recovering_%s' % state
 
     param_names = list(params_list[0].keys())
+
+    param_to_name_dict = {}
+    param_to_name_dict['proba_Recovering_given_InGeneralWard'] = r'$\rho_{\mathbf{G}}$'
+    param_to_name_dict['proba_Recovering_given_OffVentInICU'] = r'$\rho_{\mathbf{I}}$'
+    param_to_name_dict['proba_Recovering_given_OnVentInICU'] = r'$\rho_{\mathbf{V}}$'
+
+    param_to_name_dict['proba_Die_after_Declining_InGeneralWard'] = r'$d_{\mathbf{G}}$'
+    param_to_name_dict['proba_Die_after_Declining_OffVentInICU'] = r'$d_{\mathbf{I}}$'
+
+    param_to_name_dict['pmf_duration_Declining_InGeneralWard'] = r'$[\pi_1^{\mathbf{G},0}, ~\ldots~, \pi_{22}^{\mathbf{G},0}]$'
+    param_to_name_dict['pmf_duration_Declining_OffVentInICU'] = r'$[\pi_1^{\mathbf{I},0}, ~\ldots~, \pi_{22}^{\mathbf{I},0}]$'
+    param_to_name_dict['pmf_duration_Declining_OnVentInICU'] = r'$[\pi_1^{\mathbf{V},0}, ~\ldots~, \pi_{22}^{\mathbf{V},0}]$'
+
+    param_to_name_dict['pmf_duration_Recovering_InGeneralWard'] = r'$[\pi_1^{\mathbf{G},1}, ~\ldots~, \pi_{22}^{\mathbf{G},1}]$'
+    param_to_name_dict['pmf_duration_Recovering_OffVentInICU'] = r'$[\pi_1^{\mathbf{I},1}, ~\ldots~, \pi_{22}^{\mathbf{I},1}]$'
+    param_to_name_dict['pmf_duration_Recovering_OnVentInICU'] = r'$[\pi_1^{\mathbf{V},1}, ~\ldots~, \pi_{22}^{\mathbf{V},1}]$'
+
     
     param_distributions = {}
     for params in params_list:
@@ -121,12 +138,13 @@ def plot_params(params_filename, filename_prior='priors/abc_prior_config_OnCDCTa
 
     prior_samples = sample_params_from_prior(prior_dict, states, num_samples=1000)
 
-    sns.set_context("notebook", font_scale=1.075)
+    sns.set_context("notebook", font_scale=1.25)
 
     if not plot_disjointly:
         fig, ax_grid = plt.subplots(nrows=3, ncols=4, figsize=(16, 10))
         ax_grid = ax_grid.flatten()
 
+    num_samples = 10
     i = 0
     for param in param_distributions:
         if param == 'proba_Die_after_Declining_OnVentInICU':
@@ -138,6 +156,11 @@ def plot_params(params_filename, filename_prior='priors/abc_prior_config_OnCDCTa
             mean_durs = [np.mean(param_distributions[param][dur]) for dur in durations]
             upper_durs = [np.percentile(param_distributions[param][dur], 97.5) for dur in durations]
             lower_durs = [np.percentile(param_distributions[param][dur], 2.5) for dur in durations]
+
+            # durations = [str(dur) for dur in range(1, 45)]
+            # mean_durs = np.pad(np.array(mean_durs).astype(float), ((0, len(durations) - len(mean_durs)),) ,mode='constant',constant_values=(np.nan,))
+            # lower_durs = np.pad(np.array(lower_durs).astype(float), ((0, len(durations) - len(lower_durs)),) ,mode='constant',constant_values=(np.nan,))
+            # upper_durs = np.pad(np.array(upper_durs).astype(float), ((0, len(durations) - len(upper_durs)),) ,mode='constant',constant_values=(np.nan,))
 
             if filename_true_params is not None:
                 true_durs = [true_params[param][dur] for dur in durations]
@@ -154,8 +177,9 @@ def plot_params(params_filename, filename_prior='priors/abc_prior_config_OnCDCTa
                 plt.fill_between(durations, prior_lower_durs, prior_upper_durs, color='red', alpha=0.3)
                 plt.plot(durations, mean_durs, color='blue', label='posterior\nacross %d runs' % (num_samples))
                 plt.fill_between(durations, lower_durs, upper_durs, color='blue', alpha=0.3)        
-                plt.title(param)
+                plt.title(param_to_name_dict[param])
                 plt.xticks([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21])
+                # plt.xticks([2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42])
                 plt.ylim([0.0, 0.5])
                 plt.legend()
                 plt.tight_layout()
@@ -168,10 +192,11 @@ def plot_params(params_filename, filename_prior='priors/abc_prior_config_OnCDCTa
                 
                 ax.plot(durations, prior_mean_durs, color='red', label='prior')
                 ax.fill_between(durations, prior_lower_durs, prior_upper_durs, color='red', alpha=0.3)
-                ax.plot(durations, mean_durs, color='blue', label='posterior\nacross %d runs' % (num_samples))
+                ax.plot(durations, mean_durs, color='blue', label='posterior') #\nacross %d runs' % (num_samples))
                 ax.fill_between(durations, lower_durs, upper_durs, color='blue', alpha=0.3)        
-                ax.set_title(param)
+                ax.set_title(param_to_name_dict[param])
                 ax.set_xticks([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21])
+                # ax.set_xticks([2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42])
                 ax.set_ylim([0.0, 0.5])
                 ax.legend()
         else:
@@ -182,7 +207,7 @@ def plot_params(params_filename, filename_prior='priors/abc_prior_config_OnCDCTa
                     plt.axvline(true_params[param], color='k', label='true')
                 plt.hist(prior_samples[param], density=True, stacked=True, alpha=0.3, rwidth=1.0, edgecolor='r',  facecolor='r', label='prior')
                 plt.hist(param_distributions[param], density=True, stacked=True, alpha=0.5, edgecolor='blue', facecolor='blue', label='posterior\nacross %d runs' % (num_samples))
-                plt.title(param)
+                plt.title(param_to_name_dict[param])
                 if 'Die' in param:
                     plt.xlim((0, 0.1))
                 else:
@@ -197,7 +222,7 @@ def plot_params(params_filename, filename_prior='priors/abc_prior_config_OnCDCTa
                     ax.axvline(true_params[param], color='k', label='true')
                 ax.hist(prior_samples[param], density=True, stacked=True, alpha=0.3, rwidth=1.0, edgecolor='r',  facecolor='r', label='prior')
                 ax.hist(param_distributions[param], density=True, stacked=True, alpha=0.5, edgecolor='blue', facecolor='blue', label='posterior\nacross %d runs' % (num_samples))
-                ax.set_title(param)
+                ax.set_title(param_to_name_dict[param])
                 if 'Die' in param:
                     ax.set_xlim((0, 0.1))
                 else:
@@ -283,14 +308,14 @@ def plot_forecasts(forecasts_template_path, config_filepath, true_counts_filepat
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--samples_path', default='results/US/MA-20201111-20210111-20210211/posterior_samples.json', type=str)
-    parser.add_argument('--config_path', default='results/US/MA-20201111-20210111-20210211/config_after_abc.json', type=str)
-    parser.add_argument('--input_summaries_template_path', default='results/US/MA-20201111-20210111-20210211/summary_after_abc', type=str)
-    parser.add_argument('--true_stats', default='datasets/US/MA-20201111-20210111-20210211/daily_counts.csv', type=str)
+    parser.add_argument('--samples_path', default='results/US/MA-20201111-20210111-20210211/PRETRAINED_posterior_samples.json', type=str)
+    parser.add_argument('--config_path', default='results/US/UT-20201111-20210111-20210211/config_after_abc_no_distance_weights.json', type=str)
+    parser.add_argument('--input_summaries_template_path', default='results/US/UT-20201111-20210111-20210211/summary_after_abc_no_distance_weights', type=str)
+    parser.add_argument('--true_stats', default='datasets/US/UT-20201111-20210111-20210211/daily_counts.csv', type=str)
     args = parser.parse_args()
 
     ## Plot learned posterior and prior
-    plot_params(args.samples_path)
+    plot_params(args.samples_path, plot_disjointly=True, filename_to_save='MA_compact_title')
 
     ## Plot forecasts for counts of interest
-    plot_forecasts(args.input_summaries_template_path, args.config_path, args.true_stats)
+    # plot_forecasts(args.input_summaries_template_path, args.config_path, args.true_stats)
