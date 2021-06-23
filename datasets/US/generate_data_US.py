@@ -82,6 +82,9 @@ def generate_config(hObj, directory):
         init_InICU = int(hObj.get_ICU_counts()[0])
         init_OffVentInICU = int(round(init_InICU / 2))
         init_OnVentInICU = int(round((init_InICU / 2) * 1.03))
+    elif np.isnan(hObj.get_OffVentInICU_counts()).all() and not np.isnan(hObj.get_OnVentInICU_counts()).all(): # case in which only ventilator counts are shown
+        init_OffVentInICU = int(hObj.get_OnVentInICU_counts()[0])
+        init_OnVentInICU = int(hObj.get_OnVentInICU_counts()[0] * 1.03)
     else:
         init_OffVentInICU = int(hObj.get_OffVentInICU_counts()[0])
         init_OnVentInICU = int(hObj.get_OnVentInICU_counts()[0] * 1.03)
@@ -110,6 +113,9 @@ def generate_config(hObj, directory):
     if np.isnan(hObj.get_OffVentInICU_counts()).all() and np.isnan(hObj.get_OnVentInICU_counts()).all():
         config['summary_statistics_names'] = NoIndent(["n_InGeneralWard", "n_InICU", "n_TERMINAL_5daysSmoothed"])
         config['summary_statistics_weights'] = NoIndent({"n_InGeneralWard": 0.7, "n_InICU": 1.0, "n_TERMINAL_5daysSmoothed": 1.3})
+    elif np.isnan(hObj.get_OffVentInICU_counts()).all() and not np.isnan(hObj.get_OnVentInICU_counts()).all(): # case in which only ventilator counts are shown
+        config['summary_statistics_names'] = NoIndent(["n_InGeneralWard", "n_OnVentInICU", "n_TERMINAL_5daysSmoothed"])
+        config['summary_statistics_weights'] = NoIndent({"n_InGeneralWard": 0.7, "n_OnVentInICU": 1.0, "n_TERMINAL_5daysSmoothed": 1.3})
     else:
         config['summary_statistics_names'] = NoIndent(["n_InGeneralWard", "n_OffVentInICU", "n_OnVentInICU",  "n_TERMINAL_5daysSmoothed"])
         config['summary_statistics_weights'] = NoIndent({"n_InGeneralWard": 0.7, "n_OffVentInICU": 0.9, "n_OnVentInICU": 1.1, "n_TERMINAL_5daysSmoothed": 1.3})

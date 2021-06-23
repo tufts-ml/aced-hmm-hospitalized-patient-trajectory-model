@@ -181,6 +181,8 @@ class HospitalData(object):
         self.data = self.join_HHS_UMN_data(self.get_HHS_data(),self.get_UMN_data())
         
         self.filtered_data = self.get_filtered_data()
+        print(self.filtered_data['inIcuCurrently'])
+        print(self.filtered_data['staffed_icu_adult_patients_confirmed_covid'])
         
 
     def get_filtered_data(self):
@@ -203,34 +205,33 @@ class HospitalData(object):
 
     def get_InGeneralWard_counts(self):
         # returns InGeneralWard counts within [self.start_date, self.end_date] of the self.us_state specified
-
-        return (self.filtered_data.apply(lambda x: float('nan') if (None in [x['total_adult_patients_hospitalized_confirmed_covid'],x['staffed_icu_adult_patients_confirmed_covid'],x['previous_day_admission_adult_covid_confirmed']]) \
+        return (self.filtered_data.apply(lambda x: x['total_adult_patients_hospitalized_confirmed_covid']-x['inIcuCurrently'] if (np.isnan(x['total_adult_patients_hospitalized_confirmed_covid']) or np.isnan(x['staffed_icu_adult_patients_confirmed_covid'])) \
             else x['total_adult_patients_hospitalized_confirmed_covid']-x['staffed_icu_adult_patients_confirmed_covid'], axis=1)).to_numpy()
 
     def get_ICU_counts(self):
         # returns total icu counts within [self.start_date, self.end_date] of the self.us_state specified
-        return (self.filtered_data.apply(lambda x: float('nan') if (None in [x['inIcuCurrently']]) \
+        return (self.filtered_data.apply(lambda x: x['staffed_icu_adult_patients_confirmed_covid'] if np.isnan(x['inIcuCurrently']) \
             else x['inIcuCurrently'], axis=1)).to_numpy()
 
     def get_Death_counts(self):
         # returns death counts within [self.start_date, self.end_date] of the self.us_state specified
-        return (self.filtered_data.apply(lambda x: float('nan') if (None in [x['deathIncrease']]) \
+        return (self.filtered_data.apply(lambda x: float('nan') if np.isnan(x['deathIncrease']) \
             else x['deathIncrease'], axis=1)).to_numpy()
 
     def get_Admission_counts(self):
         # returns admission counts within [self.start_date, self.end_date] of the self.us_state specified
-        return (self.filtered_data.apply(lambda x: float('nan') if (None in [x['previous_day_admission_adult_covid_confirmed']]) \
+        return (self.filtered_data.apply(lambda x: float('nan') if np.isnan(x['previous_day_admission_adult_covid_confirmed']) \
             else x['previous_day_admission_adult_covid_confirmed'], axis=1)).to_numpy()
 
     def get_OnVentInICU_counts(self):
     # # returns OnVentInICU counts within [self.start_date, self.end_date] of the self.us_state specified
-        return (self.filtered_data.apply(lambda x: float('nan') if (None in [x['onVentilatorCurrently']]) \
+        return (self.filtered_data.apply(lambda x: float('nan') if np.isnan(x['onVentilatorCurrently']) \
         else x['onVentilatorCurrently'], axis=1)).to_numpy()
 
     def get_OffVentInICU_counts(self):
     # # returns OffVentInICU counts within [self.start_date, self.end_date] of the self.us_state specified
-        return (self.filtered_data.apply(lambda x: float('nan') if (None in [x['onVentilatorCurrently'], x['inIcuCurrently']]) \
-        else x['inIcuCurrently'] - x['onVentilatorCurrently'], axis=1)).to_numpy()
+        return (self.filtered_data.apply(lambda x: x['staffed_icu_adult_patients_confirmed_covid'] - x['onVentilatorCurrently'] if (np.isnan(x['inIcuCurrently']) or np.isnan(x['onVentilatorCurrently'])) \
+        else (x['inIcuCurrently'] - x['onVentilatorCurrently']), axis=1)).to_numpy()
 
 
 
