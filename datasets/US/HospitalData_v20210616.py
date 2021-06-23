@@ -181,8 +181,6 @@ class HospitalData(object):
         self.data = self.join_HHS_UMN_data(self.get_HHS_data(),self.get_UMN_data())
         
         self.filtered_data = self.get_filtered_data()
-        print(self.filtered_data['inIcuCurrently'])
-        print(self.filtered_data['staffed_icu_adult_patients_confirmed_covid'])
         
 
     def get_filtered_data(self):
