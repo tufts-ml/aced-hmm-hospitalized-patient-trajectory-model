@@ -13,11 +13,21 @@ The model and its fitting and forecasting procedures satisfy two desired propert
 * We focus on **probabilistic** modeling using a Bayesian approach, in order to capture and communicate uncertainty about the varied possible outcomes. We estimate distributions over all quantities of interest.
 * To be **portable** to health systems around the world, we assume access only to aggregated daily counts of resource usage (number of occupied beds in general ward, in ICU, on ventilator). No patient-specific data (demographics, comorbidities, length-of-stay, etc.) are used.
 
-See our preprint manuscript:
+See our manuscript, which was recently accepted and published as part of the <a href="https://www.mlforhc.org/accepted-papers-1">Machine Learning for Healthcare 2021 conference</a>:
 
-Gian Marco Visani, Alexandra Hope Lee, Cuong Nguyen, David M. Kent, John B. Wong, Joshua T. Cohen, and Michael C. Hughes. <i>Approximate Bayesian Computation for an Explicit-Duration Hidden Markov Model of COVID-19 Hospital Trajectories.</i>. Technical Report, 2021. <a href="https://www.michaelchughes.com/papers/VisaniEtAl_arXiv_2021.pdf">https://www.michaelchughes.com/papers/VisaniEtAl_arXiv_2021.pdf</a>
-
-Now also available on arXiv preprint server: <https://arxiv.org/abs/2105.00773>
+<blockquote>
+<p>
+<i>Approximate Bayesian Computation for an Explicit-Duration Hidden Markov Model of COVID-19 Hospital Trajectories.</i>.
+ <br />
+Gian Marco Visani, Alexandra Hope Lee, Cuong Nguyen, David M. Kent, John B. Wong, Joshua T. Cohen, and Michael C. Hughes.
+ <br />
+In Proceedings of Machine Learning for Healthcare (MLHC), 2021.
+ <br />
+PDF available: <a href="https://www.michaelchughes.com/papers/VisaniEtAl_MLHC_2021.pdf">https://www.michaelchughes.com/papers/VisaniEtAl_MLHC_2021.pdf</a>
+</p>
+</blockquote>
+    
+Now also available on the arXiv preprint server: <https://arxiv.org/abs/2105.00773>
 
 See also this slide deck overview: <https://docs.google.com/presentation/d/1MLkQLV8a5w1o6hBdfa8-b1J0DKh13JHWyVhEo8ddyB8>
 
