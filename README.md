@@ -203,10 +203,10 @@ The summaries include (one file for each one): mean, stddev, and all percentiles
 
 Run the following command:  
 ```console
-$ python -m aced_hmm.abc_test_metrics --input_dir [results/US/MA-20201111-20210111-20210211] \
+$ python -m aced_hmm.ABC_test_metrics --input_dir [results/US/MA-20201111-20210111-20210211] \
                                       --output_dir [results/US/MA-20201111-20210111-20210211] \
                                       --output_template [metrics_after_abc] \
-                                      --config_file [results/US/MA-20201111-20210111-20210211/config_after_abc.json] \
+                                      --config_path [results/US/MA-20201111-20210111-20210211/config_after_abc.json] \
                                       --true_stats [datasets/US/MA-20201111-20210111-20210211/daily_counts.csv] \
                                       --input_summaries_template [summary_after_abc_] \
                                       --coverages [2.5_97.5,10_90,25_75] \
